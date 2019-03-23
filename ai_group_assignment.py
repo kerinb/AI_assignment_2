@@ -2,7 +2,8 @@
 # Contributors - Breandán Kerin, Sinead Dickson, Alanna O'Grady #
 #          Artificial Intelligence Assignment 2                 #
 #################################################################
-
+import time
+import matplotlib.pyplot as plt
 
 def printBoard(board, N):
     for i in range(N):
@@ -65,13 +66,34 @@ def createBoard(numQueens):
 
 
 def n_queens_backtracking(numberQueens):
+    start = time.time()
     board = createBoard(numberQueens)
     if back_tracking(board, 0, numberQueens) == False:
         print("Solution does not exist")
-        return False
+        end = time.time()
+        execution_time = end - start
+        print(execution_time)
+        return execution_time
     printBoard(board, numberQueens)
-    return True
+    end = time.time()
+    execution_time = end - start
+    print(execution_time)
+    return execution_time
 
 
 if __name__ == '__main__':
-    n_queens_backtracking(16)
+    execution_times = []
+    queens_test_range = range(4, 28, 4)
+    
+    # backtracking
+    for i in queens_test_range:
+        execution_times.append(n_queens_backtracking(i))
+
+    # execution time plot
+    plt.plot(queens_test_range, execution_times)
+    plt.title("Execution times")
+    plt.xlabel("Number of Queens")
+    plt.ylabel("Time [s]")
+    plt.legend(['Backtracking'], loc='upper left')
+    plt.show()
+
