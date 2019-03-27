@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="288e4a91-22bc-4f4e-98f6-8aefc46b7cde" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/~WRL0001.tmp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ai_assignment2_group.doc" beforeDir="false" afterPath="$PROJECT_DIR$/ai_assignment2_group.doc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/~$_assignment2_group.doc" beforeDir="false" afterPath="$PROJECT_DIR$/~$_assignment2_group.doc" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -159,7 +156,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="0" width="976" height="1038" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.39247313" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.39247313" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -170,7 +167,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32912844" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.4082569" />
+      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.4082569" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.32993197" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
