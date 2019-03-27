@@ -18,16 +18,20 @@ def print_board(board, n):
 
 def consistency_check_backtrack(board, row, col, n):
     # check for other queen in same row
+    global num_checks
     for i in range(col):
+        num_checks += 1
         if board[row][i] == 1:
             return False
 
     for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        num_checks += 1
         if board[i][j] == 1:
             return False
 
         # Check lower diagonal on left side
     for i, j in zip(range(row, n, 1), range(col, -1, -1)):
+        num_checks += 1
         if board[i][j] == 1:
             return False
 
