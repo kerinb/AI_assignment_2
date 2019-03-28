@@ -5,6 +5,7 @@
 
 import sys
 import time
+import matplotlib.pyplot as plt
 
 num_checks = 0
 
@@ -19,6 +20,8 @@ def print_board(board, n):
 def consistency_check_backtrack(board, row, col, n):
     # check for other queen in same row
     global num_checks
+    num_checks += 1
+
     for i in range(col):
         num_checks += 1
         if board[row][i] == 1:
@@ -154,31 +157,61 @@ def create_board(num_queens):
 
 
 def n_queens_backtracking(number_queens):
+    start = time.time()
     print("backtrack")
     board = create_board(number_queens)
     if not back_tracking(board, 0, number_queens):
         print("Solution does not exist")
-        return False
+        end = time.time()
+        execution_time = end - start
+        print(execution_time)
+        return execution_time
     print_board(board, number_queens)
-    return True
+    end = time.time()
+    execution_time = end - start
+    print(execution_time)
+    return execution_time
 
 
 if __name__ == '__main__':
-    problem = sys.argv[1]
-    n = int(sys.argv[2])
+    backtracking_execution_times = []
+    backtracking_num_checks = []
+    bnb_execution_times = []
+    bnb_num_checks = []
+    queens_test_range = range(4, 24, 4)
 
-    if problem == "backtrack":
-        start_time = time.time()
-        n_queens_backtracking(n)
-        print("BackTracking Time Taken" + str(time.time() - start_time))
+    # backtracking
+    for i in queens_test_range:
+        #backtracking
+        backtracking_execution_times.append(n_queens_backtracking(i))
+        print("BackTracking Time Taken: " + str(n_queens_backtracking(i)))
         print("Number of checks in BNB: " + str(num_checks))
-
-    elif problem == "bnb":
+        backtracking_num_checks.append(num_checks)
+        num_checks = 0  # reinitialise to 0 for next algorithm
+        #bnb
         start_time = time.time()
-        n_queens_branch_and_bound(n)
-
+        n_queens_branch_and_bound(i)
+        bnb_execution_times.append(time.time() - start_time)
         print("Branch and Bound Time Taken: %s" % (str(time.time() - start_time)))
         print("Number of checks in BNB: " + str(num_checks))
+        bnb_num_checks.append(num_checks)
+        num_checks = 0  # reinitialise to 0 for next algorithm
 
-    elif problem == "arcConsistency":
-        print("this is dans area")
+    # execution time plot
+    plt.plot(queens_test_range, backtracking_execution_times)
+    plt.plot(queens_test_range, bnb_execution_times)
+    plt.title("Execution times")
+    plt.xlabel("Number of Queens")
+    plt.ylabel("Time [s]")
+    plt.legend(['Backtracking', "BNB"], loc='upper left')
+    plt.savefig('execution_times.png')
+    plt.clf()
+
+    # number of checks plot
+    plt.plot(queens_test_range, backtracking_num_checks)
+    plt.plot(queens_test_range, bnb_num_checks)
+    plt.title("Number of Checks")
+    plt.xlabel("Number of Queens")
+    plt.ylabel("Time [s]")
+    plt.legend(['Backtracking', "BNB"], loc='upper left')
+    plt.savefig('number_checks.png')
