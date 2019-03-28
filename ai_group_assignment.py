@@ -21,16 +21,20 @@ def consistency_check_backtrack(board, row, col, n):
     # check for other queen in same row
     global num_checks
     num_checks += 1
+
     for i in range(col):
+        num_checks += 1
         if board[row][i] == 1:
             return False
 
     for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        num_checks += 1
         if board[i][j] == 1:
             return False
 
         # Check lower diagonal on left side
     for i, j in zip(range(row, n, 1), range(col, -1, -1)):
+        num_checks += 1
         if board[i][j] == 1:
             return False
 
@@ -66,20 +70,20 @@ def back_tracking(board, col, n):
 
 
 # A Optimized function to check if a queen can  be placed on board[row][col]
-def is_safe_bnb(row, col, slash_code, backslash_code, row_lookup, slash_code_lookup, backslash_code_lookup):
-    val1 = slash_code[row][col]
-    val2 = backslash_code[row][col]
+def is_safe_bnb(row, col, forward_slash_helper, back_slash_helper, row_lookup_helper, forward_slash_lookup_helper, back_slash_lookup_helper):
+    val1 = forward_slash_helper[row][col]
+    val2 = back_slash_helper[row][col]
 
     global num_checks
     num_checks += 1
 
-    if slash_code_lookup[val1] or backslash_code_lookup[val2] or row_lookup[row]:
+    if forward_slash_lookup_helper[val1] or back_slash_lookup_helper[val2] or row_lookup_helper[row]:
         return False
     return True
 
 
 # A recursive utility function to solve N Queen problem
-def bnb_solve_n_q(board, col, slash_code, backslash_code, row_lookup, slash_code_lookup, backslash_code_lookup, n):
+def bnb_solve_n_q(board, col, forward_slash_helper, back_slash_helper, row_lookup_helper, forward_slash_lookup_helper, back_slash_lookup_helper, n):
     # base case: If all queens are placed then return true
     if col >= n:
         return True
@@ -87,30 +91,30 @@ def bnb_solve_n_q(board, col, slash_code, backslash_code, row_lookup, slash_code
     # Consider this column and try placing this queen in all rows one by one
     for i in range(n):
         # Check if queen can be placed on board[i][col]
-        if is_safe_bnb(i, col, slash_code, backslash_code, row_lookup,
-                       slash_code_lookup, backslash_code_lookup):
+        if is_safe_bnb(i, col, forward_slash_helper, back_slash_helper, row_lookup_helper,
+                       forward_slash_lookup_helper, back_slash_lookup_helper):
 
             # Place this queen in board[i][col]
             board[i][col] = 1
-            row_lookup[i] = True
-            val1 = slash_code[i][col]
-            val2 = backslash_code[i][col]
-            slash_code_lookup[val1] = True
-            backslash_code_lookup[val2] = True
+            row_lookup_helper[i] = True
+            val1 = forward_slash_helper[i][col]
+            val2 = back_slash_helper[i][col]
+            forward_slash_lookup_helper[val1] = True
+            back_slash_lookup_helper[val2] = True
 
             # recur to place rest of the queens
-            if bnb_solve_n_q(board, col + 1, slash_code, backslash_code, row_lookup,
-                             slash_code_lookup, backslash_code_lookup, n):
+            if bnb_solve_n_q(board, col + 1, forward_slash_helper, back_slash_helper, row_lookup_helper,
+                             forward_slash_lookup_helper, back_slash_lookup_helper, n):
                 return True
 
             # If placing queen in board[i][col] doesn't lead to a solution, then backtrack
             # Remove queen from board[i][col]
             board[i][col] = 0
-            row_lookup[i] = False
-            val1 = slash_code[i][col]
-            val2 = backslash_code[i][col]
-            slash_code_lookup[val1] = False
-            backslash_code_lookup[val2] = False
+            row_lookup_helper[i] = False
+            val1 = forward_slash_helper[i][col]
+            val2 = back_slash_helper[i][col]
+            forward_slash_lookup_helper[val1] = False
+            back_slash_lookup_helper[val2] = False
 
     # If queen can not be place in any row in this column col then return false
     return False
@@ -121,24 +125,24 @@ def n_queens_branch_and_bound(n):
     board = create_board(n)
 
     # helper matrices
-    slash_code = create_board(n)
-    backslash_code = create_board(n)
+    forward_slash_helper = create_board(n)
+    back_slash_helper = create_board(n)
 
     # arrays to tell us which rows are occupied
-    row_lookup = [False] * n
+    row_helper = [False] * n
 
     # keep two arrays to tell us which diagonals are occupied
-    slash_code_lookup = [False] * (2 * n - 1)
-    backslash_code_lookup = [False] * (2 * n - 1)
+    forward_slash_lookup_helper = [False] * (2 * n - 1)
+    back_slash_lookup_helper = [False] * (2 * n - 1)
 
     # initialise helper matrices
     for r in range(n):
         for c in range(n):
-            slash_code[r][c] = r + c
-            backslash_code[r][c] = r - c + (n - 1)
+            forward_slash_helper[r][c] = r + c
+            back_slash_helper[r][c] = r - c + (n - 1)
 
-    if not bnb_solve_n_q(board, 0, slash_code, backslash_code,
-                         row_lookup, slash_code_lookup, backslash_code_lookup, n):
+    if not bnb_solve_n_q(board, 0, forward_slash_helper, back_slash_helper,
+                         row_helper, forward_slash_lookup_helper, back_slash_lookup_helper, n):
         print("solution doesn't exist")
         return False
     print_board(board, n)
