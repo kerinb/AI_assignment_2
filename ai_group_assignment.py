@@ -6,6 +6,9 @@
 import sys
 import time
 import matplotlib.pyplot as plt
+from copy import deepcopy
+import random
+import numpy as np
 
 num_checks = 0
 
@@ -172,20 +175,134 @@ def n_queens_backtracking(number_queens):
     print(execution_time)
     return execution_time
 
+##~~~~~~~~~~~~~~~~ HILL CLIMBING ~~~~~~~~~~~~~~
+
+def generate_random_board(n):
+    """
+    Returns a vector of positions where queen is for
+    each column
+    """
+    q = []
+    b = create_board(n)
+    for col in range(n):  
+        r = random.randint(0, n-1)
+        q.append(r)
+        b[r][col] = 1
+    return b, q
+def do_avoid_eachother(i, j, q):
+    """
+    Assumes i != j, and j > i
+    """
+    global num_checks
+    num_checks+=1
+    if q[i] == q[j]:
+        return 0
+    elif abs(j-i) == abs(q[j] - q[i]):
+        return 0
+    else:
+        
+        return 1
+def objective_function(q):
+    """
+    Measure how many pairs of queens do not get in each other's way
+    param: board a 2 d list indicating where queens are
+    param: q : a list indictating where the queens for each column are
+    n: n for n queens
+    """
+    result = 0
+    n = len(q)
+    for i in range(n):
+        for j in range(i+1, n):
+            # check if queen i and j are giving each other grief
+            avoid_eachother = do_avoid_eachother(i,j,q)
+            result += avoid_eachother
+            
+    return result
+
+
+
+def compute_optimum_avoiding_pairs(n):
+    """
+    Compute the optimum number of queens
+    that could avoid each other for n queens
+    problem, given by sigma(n)
+    """
+    count = 0
+    for i in range(n):
+        count+=i
+    return count
+
+def hill_climbing_algorithm(starting_q):
+    """
+    Compute hill climbing algorithm for input
+    list of queen positions
+    """
+    start = time.time()
+    n = len(starting_q)
+    optimum = compute_optimum_avoiding_pairs(n)
+    best_score = objective_function(starting_q) 
+    q = starting_q
+    while(best_score < optimum):
+        better_score_found = False
+        for i in range(n):
+            # Cycle through all queens
+            temp_q = deepcopy(q)
+            for j in range(n):
+                if j != q[i]:
+                    temp_q[i] = j
+                    score = objective_function(temp_q)
+                    if score > best_score:
+                        q = temp_q
+                        best_score = score
+                        better_score_found = True
+                        break
+                
+                
+        if not better_score_found:
+            q = randomise_board(q)
+            best_score = objective_function(q)
+    end = time.time()
+    ##print("Hill Climbing board results:") 
+    ##print_board_q(q)
+    return end-start
+
+def randomise_board(q):
+    """
+    Randomise board given input is a list of
+    queen positions
+    """
+    n = len(q)
+    for i in range(n):
+        q[i] = random.randint(0, n-1)
+    return q
+def print_board_q(q):
+    """
+    Print function specific to the list data structure used in 
+    hill climbing
+    """
+    n = len(q)
+    b = create_board(n)
+    for i in range(n):
+        b[q[i]][i] = 1
+    print_board(b, n)
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 if __name__ == '__main__':
     backtracking_execution_times = []
     backtracking_num_checks = []
     bnb_execution_times = []
     bnb_num_checks = []
+    hill_climbing_execution_times = []
+    hill_climbing_num_checks = []
     queens_test_range = range(4, 24, 4)
-
+    HILL_CLIMBING_SAMPLE_SIZE = 20 ## In order to account for randomisation
     # backtracking
     for i in queens_test_range:
+        print(i)
         #backtracking
         backtracking_execution_times.append(n_queens_backtracking(i))
         print("BackTracking Time Taken: " + str(n_queens_backtracking(i)))
-        print("Number of checks in BNB: " + str(num_checks))
+        print("Number of checks in Backtracking: " + str(num_checks))
         backtracking_num_checks.append(num_checks)
         num_checks = 0  # reinitialise to 0 for next algorithm
         #bnb
@@ -197,21 +314,38 @@ if __name__ == '__main__':
         bnb_num_checks.append(num_checks)
         num_checks = 0  # reinitialise to 0 for next algorithm
 
+        ##hill climbing
+        temp_times = []
+        temp_checks = []
+        for _ in range(HILL_CLIMBING_SAMPLE_SIZE):
+            _, q = generate_random_board(i)
+            t = hill_climbing_algorithm(q)
+            temp_times.append(t)
+            temp_checks.append(num_checks)
+            num_checks = 0
+        hill_climbing_execution_times.append(np.median(temp_times))
+        hill_climbing_num_checks.append(np.median(temp_checks))
+        print("Hill Climbing Time Taken: %s" % (np.median(temp_times)))
+        print("Number of checks in Hill Climbing: " + str(np.median(temp_checks)))
+        
+
     # execution time plot
     plt.plot(queens_test_range, backtracking_execution_times)
     plt.plot(queens_test_range, bnb_execution_times)
+    plt.plot(queens_test_range, hill_climbing_execution_times)
     plt.title("Execution times")
     plt.xlabel("Number of Queens")
     plt.ylabel("Time [s]")
-    plt.legend(['Backtracking', "BNB"], loc='upper left')
+    plt.legend(['Backtracking', "BNB", "hill climbing"], loc='upper left')
     plt.savefig('execution_times.png')
     plt.clf()
 
     # number of checks plot
     plt.plot(queens_test_range, backtracking_num_checks)
     plt.plot(queens_test_range, bnb_num_checks)
+    plt.plot(queens_test_range, hill_climbing_num_checks)
     plt.title("Number of Checks")
     plt.xlabel("Number of Queens")
     plt.ylabel("Time [s]")
-    plt.legend(['Backtracking', "BNB"], loc='upper left')
+    plt.legend(['Backtracking', "BNB", "hill_climbing"], loc='upper left')
     plt.savefig('number_checks.png')
