@@ -1,6 +1,7 @@
 #removing IDE specific files
 .idea
 ~$_assignment2_group.doc
+*.tmp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
