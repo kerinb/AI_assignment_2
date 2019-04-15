@@ -3,7 +3,6 @@
 #               Artificial Intelligence Assignment 2                            #
 #################################################################################
 
-import sys
 import time
 import matplotlib.pyplot as plt
 from copy import deepcopy
@@ -333,10 +332,10 @@ if __name__ == '__main__':
     plt.plot(queens_test_range, backtracking_execution_times)
     plt.plot(queens_test_range, bnb_execution_times)
     plt.plot(queens_test_range, hill_climbing_execution_times)
-    plt.title("Execution times")
+    plt.title("Execution Times")
     plt.xlabel("Number of Queens")
     plt.ylabel("Time [s]")
-    plt.legend(['Backtracking', "BNB", "hill climbing"], loc='upper left')
+    plt.legend(['Backtracking', "Branch and Bound", "Hill Climbing"], loc='upper left')
     plt.savefig('execution_times.png')
     plt.clf()
 
@@ -347,5 +346,5 @@ if __name__ == '__main__':
     plt.title("Number of Checks")
     plt.xlabel("Number of Queens")
     plt.ylabel("Time [s]")
-    plt.legend(['Backtracking', "BNB", "hill_climbing"], loc='upper left')
+    plt.legend(['Backtracking', "Branch and Bound", "Hill Climbing"], loc='upper left')
     plt.savefig('number_checks.png')
