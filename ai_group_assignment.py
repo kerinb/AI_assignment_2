@@ -3,7 +3,6 @@
 #               Artificial Intelligence Assignment 2                            #
 #################################################################################
 
-import sys
 import time
 import matplotlib.pyplot as plt
 
