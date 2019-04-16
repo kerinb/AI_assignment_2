@@ -62,10 +62,11 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="width" value="976" />
-    <option name="height" value="1038" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="57" />
+    <option name="y" value="91" />
+    <option name="width" value="2196" />
+    <option name="height" value="1545" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -106,14 +107,6 @@
         </RuleState>
       </list>
     </option>
-  </component>
-  <component name="RunManager">
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.ai_group_assignment" />
-        <item itemvalue="Python.ai_group_assignment" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
